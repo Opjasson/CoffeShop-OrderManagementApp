@@ -35,7 +35,7 @@
             app:srcCompat="@drawable/shoppingbagrafiki2" />
 
         <EditText
-            android:id="@+id/emailForm"
+            android:id="@+id/R_emailForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/form_circular_rectangle"
@@ -47,7 +47,7 @@
             tools:layout_marginTop="40dp" />
 
         <EditText
-            android:id="@+id/passwordForm"
+            android:id="@+id/R_passwordForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -69,6 +69,16 @@
             android:inputType="text|textPassword"
             android:padding="16dp"
             android:textColor="@color/mediumBold_cream" />
+
+        <TextView
+            android:id="@+id/r_alertForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Lengkapi Formulir!"
+            android:textAlignment="center"
+            android:textColor="@color/bold_pink"
+            android:textSize="16sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/registBtn"

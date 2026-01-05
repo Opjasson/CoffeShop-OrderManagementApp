@@ -10,18 +10,18 @@ class AuthRepository {
 // Registrasi Repository
 fun registAuth (
     email : String,
-    password : String
+    password : String,
     onResult: (Boolean, String?)-> Unit
 ) {
     auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
 result ->
     val uid = result.user!!.uid
-    val user =hashMapOf(
+    val user = hashMapOf(
         "email" to email,
         "password" to password
     )
 
-database.collection("users").document(uid).set(user)
+        database.collection("users").document(uid).set(user)
         onResult(true, null)
     }.addOnFailureListener {
     e ->
