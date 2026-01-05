@@ -22,8 +22,9 @@ class SplashActivity : AppCompatActivity() {
             insets
         }
 
-        binding.button2.setOnClickListener {
+        binding.splashBtn.setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))
         }
+
     }
 }
