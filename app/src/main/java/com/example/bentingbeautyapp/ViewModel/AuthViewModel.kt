@@ -38,4 +38,16 @@ class AuthViewModel: ViewModel() {
             }
         }
     }
+
+//    Forgot Password Model
+
+    private val _forgotPassResult = MutableLiveData<Boolean>()
+    val forgotPassResult : LiveData<Boolean> = _forgotPassResult
+
+    fun forgotPass(email : String) {
+        repository.forgotPassword(email) {
+            _forgotPassResult.value = it
+        }
+    }
+
 }

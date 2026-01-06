@@ -1,5 +1,7 @@
 package com.example.bentingbeautyapp.Repository
 
+import android.util.Log
+import com.google.android.gms.common.api.internal.StatusCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -44,4 +46,22 @@ fun registAuth (
         onResult(false, e.message)
     }
 }
+
+//    Forgot password repository
+fun forgotPassword (
+    email : String,
+    callback: (Boolean) -> Unit
+    ) {
+        database.collection("users")
+            .whereEqualTo("email", email)
+            .limit(1)
+            .get()
+            .addOnSuccessListener {
+                callback(!it.isEmpty)
+            }
+            .addOnFailureListener {
+                callback(false)
+            }
+}
+
 }

@@ -60,6 +60,16 @@
             android:textColor="@color/mediumBold_cream" />
 
         <TextView
+            android:id="@+id/l_alertForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Lengkapi Formulir!"
+            android:textAlignment="center"
+            android:textColor="@color/bold_pink"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/forgotPassTxt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
