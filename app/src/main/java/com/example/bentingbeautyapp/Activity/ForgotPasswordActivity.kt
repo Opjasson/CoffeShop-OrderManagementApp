@@ -53,10 +53,8 @@ class ForgotPasswordActivity : AppCompatActivity() {
             result ->
 
             if (result) {
-                Toast.makeText(this, "Email ditemukan", Toast.LENGTH_SHORT).show()
-            }else {
-                binding.FPAlertForm.text = "Email tidak terdaftar"
-                binding.FPAlertForm.visibility = View.VISIBLE
+                Toast.makeText(this, "Cek email anda", Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }

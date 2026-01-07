@@ -55,12 +55,9 @@ fun forgotPassword (
     ) {
         auth.sendPasswordResetEmail(email)
             .addOnSuccessListener {
-
                 callback(true)
             }
-            .addOnFailureListener {
-                callback(false)
-            }
+
 }
 
 }
