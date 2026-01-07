@@ -27,8 +27,8 @@ class AuthViewModel: ViewModel() {
     private val _regisResult = MutableLiveData<Result<String>>()
     val registResult: LiveData<Result<String>> = _regisResult
 
-    fun register(email : String, password : String){
-        repository.registAuth(email, password) {
+    fun register(username : String, email : String, password : String){
+        repository.registAuth(username, email, password) {
 
             success, message ->
             if(success) {

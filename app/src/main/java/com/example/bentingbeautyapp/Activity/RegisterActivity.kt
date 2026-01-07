@@ -2,6 +2,7 @@ package com.example.bentingbeautyapp.Activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -38,11 +39,16 @@ class RegisterActivity : AppCompatActivity() {
 
         //        Handle register
        binding.registBtn.setOnClickListener {
+            val username = binding.RUsernameForm.text.toString().trim()
             val email = binding.REmailForm.text.toString().trim()
             val password = binding.RPasswordForm.text.toString().trim()
             val confPassword = binding.confPasswordForm.text.toString().trim()
 
-            if (email.isEmpty() || password.isEmpty() || confPassword.isEmpty()){
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confPassword.isEmpty()){
+                binding.rAlertForm.text = "Lengkapi formulir!"
+                binding.rAlertForm.visibility = View.VISIBLE
+            }else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                binding.rAlertForm.text = "Format email tidak valid!"
                 binding.rAlertForm.visibility = View.VISIBLE
             }else if (password != confPassword) {
                 binding.apply {
@@ -50,7 +56,7 @@ class RegisterActivity : AppCompatActivity() {
                     rAlertForm.visibility = View.VISIBLE
                 }
             }else {
-                viewModel.register(email, password)
+                viewModel.register(username, email, password)
             }
         }
 

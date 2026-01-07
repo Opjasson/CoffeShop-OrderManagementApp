@@ -25,6 +25,7 @@ fun loginAuth (
 
 //    Registrasi Repository
 fun registAuth (
+    username : String,
     email : String,
     password : String,
     onResult: (Boolean, String?)-> Unit
@@ -35,8 +36,8 @@ fun registAuth (
     val uid = result.user!!.uid
 
     val user = hashMapOf(
+        "username" to username,
         "email" to email,
-        "password" to password
     )
 
         database.collection("users").document(uid).set(user)
@@ -52,12 +53,10 @@ fun forgotPassword (
     email : String,
     callback: (Boolean) -> Unit
     ) {
-        database.collection("users")
-            .whereEqualTo("email", email)
-            .limit(1)
-            .get()
+        auth.sendPasswordResetEmail(email)
             .addOnSuccessListener {
-                callback(!it.isEmpty)
+
+                callback(true)
             }
             .addOnFailureListener {
                 callback(false)

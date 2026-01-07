@@ -29,12 +29,13 @@ class ForgotPasswordActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        var email = binding.FPEmailForm.text.toString()
 
         binding.apply {
             FPAlertForm.visibility = View.GONE
 
             forgotPassBtn.setOnClickListener {
-                val email = FPEmailForm.text.toString()
+                email = FPEmailForm.text.toString()
                 if (email.isEmpty()) {
                     FPAlertForm.text = "Isi Formulir!"
                     FPAlertForm.visibility = View.VISIBLE
@@ -53,7 +54,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
             if (result) {
                 Toast.makeText(this, "Email ditemukan", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, ChangePasswordActivity::class.java))
             }else {
                 binding.FPAlertForm.text = "Email tidak terdaftar"
                 binding.FPAlertForm.visibility = View.VISIBLE
