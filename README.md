@@ -8,12 +8,12 @@ Before starting, make sure you have Android Studio installed.
 
 ```bash
 cd \.locationTarget
-git clone https://github.com/Opjasson/learingManagementSystem-Application.git
+git clone https://github.com/Opjasson/MUA-OrderManagementApp.git
 ```
 
 ```file
 1. open Android Studio software
-2. open folder learningManagementSystem-Application in android studio
+2. open folder MUA-OrderManagementApp in android studio
 2. wait until the graddle installation is complete
 ```
 
