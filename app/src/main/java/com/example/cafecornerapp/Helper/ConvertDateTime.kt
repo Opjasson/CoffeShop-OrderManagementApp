@@ -1,4 +1,4 @@
-package com.example.cafecornerapp.Adapter
+package com.example.cafecornerapp.Helper
 
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
