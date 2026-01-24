@@ -24,8 +24,10 @@ class CardProductAdapter(val items: MutableList<ProductModel>):
 
     override fun onBindViewHolder(holder: CardProductAdapter.Viewholder, position: Int) {
         holder.binding.titleTxt.text= items[position].nama_product
+            .replaceFirstChar { it.uppercase() }
         holder.binding.priceTxt.text="$"+items[position].harga_product.toString()
-        holder.binding.subtitleTxt.text= items[position].deskripsi_product.toString()
+        holder.binding.subtitleTxt.text= items[position].deskripsi_product.toString().take(50)
+            .replaceFirstChar { it.uppercase() } + "..."
 
         Glide.with(context).load(items[position].imgUrl).into(holder.binding.pic)
 
