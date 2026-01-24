@@ -3,9 +3,10 @@ package com.example.cafecornerapp.Repository
 import androidx.lifecycle.ViewModel
 import com.example.cafecornerapp.Adapter.ConvertDateTime
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 
-class ProductRepository : ViewModel() {
-
+class ProductRepository {
+    private val database = FirebaseFirestore.getInstance()
     private lateinit var convertDate : ConvertDateTime()
 
     //    Add item
