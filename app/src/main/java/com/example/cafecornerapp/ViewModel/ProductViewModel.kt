@@ -3,8 +3,10 @@ package com.example.cafecornerapp.ViewModel
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.cafecornerapp.Domain.ProductModel
 import com.example.cafecornerapp.Repository.CloudinaryRepository
 import com.example.cafecornerapp.Repository.ProductRepository
 
@@ -48,4 +50,15 @@ class ProductViewModel : ViewModel() {
             }
         }
     }
+
+    //    Get all items
+    private val _searchResult = MutableLiveData<List<ProductModel>>()
+    val searchResult: LiveData<List<ProductModel>> = _searchResult
+
+    fun loadAllItems() {
+        repository.getAllItems() {
+            _searchResult.value = it
+        }
+    }
+
 }

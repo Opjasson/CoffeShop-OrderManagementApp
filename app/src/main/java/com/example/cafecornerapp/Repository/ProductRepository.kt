@@ -41,11 +41,11 @@ class ProductRepository {
 
     //    Get all product
     fun getAllItems(callback: (List<ProductModel>) -> Unit) {
-        database.collection("items")
+        database.collection("product")
             .get()
             .addOnSuccessListener { snapshots ->
                 val list = snapshots.documents.mapNotNull { doc ->
-                    doc.toObject(ItemsModel::class.java)?.apply {
+                    doc.toObject(ProductModel::class.java)?.apply {
                         documentId = doc.id   // 🔥 isi documentId
                     }
                 }
