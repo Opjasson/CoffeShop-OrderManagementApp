@@ -155,7 +155,7 @@
                             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/editBtn"
+                            android:id="@+id/addProductBtn"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="80dp"
