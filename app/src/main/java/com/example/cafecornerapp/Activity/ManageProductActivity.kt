@@ -9,16 +9,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.cafecornerapp.R
-import com.example.cafecornerapp.databinding.ActivityMainBinding
+import com.example.cafecornerapp.databinding.ActivityManageProductBinding
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityMainBinding
+class ManageProductActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityManageProductBinding
+
     private lateinit var drawerLayout: DrawerLayout
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityManageProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-       initSideBar()
+        initSideBar()
     }
 
     private fun initSideBar () {
