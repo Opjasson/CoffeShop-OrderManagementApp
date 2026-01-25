@@ -61,4 +61,14 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+//    Delete product
+    private var _successDelete = MutableLiveData<Boolean>()
+    var successDelete : LiveData<Boolean> = _successDelete
+    
+    fun deleteProduct(productId : String) {
+        repository.deleteProduct(productId) {
+            _successDelete = it
+        }
+    }
+
 }
