@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cafecornerapp.Adapter.CardProductlistAdapter
 import com.example.cafecornerapp.R
 import com.example.cafecornerapp.ViewModel.ProductViewModel
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         initSideBar()
         initShowProduct()
+        initShowOffer()
     }
 
     private fun initShowProduct () {
@@ -99,8 +101,26 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.productKategoriResult.observe(this) {
                 list ->
-            binding.rvMenu.layoutManager = GridLayoutManager(this@MainActivity, 2)
+            binding.rvMenu.layoutManager = LinearLayoutManager(this@MainActivity,
+                LinearLayoutManager.HORIZONTAL,false
+            )
             binding.loadMenu.visibility = View.GONE
+
+            productAdapter.updateData(list.toMutableList())
+        }
+    }
+
+    private fun initShowOffer () {
+        val productAdapter = CardProductlistAdapter(mutableListOf())
+        binding.rvSpecial.adapter = productAdapter
+
+        viewModel.getProductOffer()
+
+        viewModel.productOfferResult.observe(this) {
+                list ->
+            Log.d("OFFER", list.toString())
+            binding.rvSpecial.layoutManager = GridLayoutManager(this@MainActivity, 2)
+            binding.loadOffer.visibility = View.GONE
 
             productAdapter.updateData(list.toMutableList())
         }

@@ -91,7 +91,7 @@ class ProductRepository {
             .addOnSuccessListener {
                     snapshots ->
                 val list = snapshots.documents.mapNotNull { doc ->
-                    doc.toObject(ItemsModel::class.java)?.apply {
+                    doc.toObject(ProductModel::class.java)?.apply {
                         documentId = doc.id   // 🔥 isi documentId
                     }
                 }
