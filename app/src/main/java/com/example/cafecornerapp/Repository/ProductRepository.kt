@@ -52,4 +52,13 @@ class ProductRepository {
                 callback(list)
             }
     }
+
+//    Delete product
+    fun deleteProduct (productId : String, onResult: (Boolean) -> Unit) {
+        database.collection("product")
+            .document(productId)
+            .delete()
+            .addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
+    }
 }

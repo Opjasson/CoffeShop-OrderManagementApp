@@ -31,6 +31,10 @@ class CardProductAdapter(val items: MutableList<ProductModel>):
 
         Glide.with(context).load(items[position].imgUrl).into(holder.binding.pic)
 
+        holder.binding.deleteBtn.setOnClickListener {
+
+        }
+
         holder.itemView.setOnClickListener {
 //            val intent = Intent(context, DetailActivity::class.java)
 //            intent.putExtra("object", items[position])
