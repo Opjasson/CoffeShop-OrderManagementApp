@@ -39,14 +39,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="16dp">
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
 
                         <Button
                             android:id="@+id/tambahProductBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
                             android:backgroundTint="#83A95B"
                             android:text="+ Tambah Product"
                             android:textAllCaps="false"
@@ -57,12 +57,14 @@
                             android:id="@+id/MP_loadProduct"
                             style="?android:attr/progressBarStyle"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/MPproductView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="-22dp"
                             android:nestedScrollingEnabled="false"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:layout_constraintEnd_toEndOf="parent"

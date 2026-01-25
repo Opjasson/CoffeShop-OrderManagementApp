@@ -61,4 +61,23 @@ class ProductRepository {
             .addOnSuccessListener { onResult(true) }
             .addOnFailureListener { onResult(false) }
     }
+
+    //     get product by kategori
+    fun getProductByKategori(
+        kategori : String,
+        callback : (List<ProductModel>) -> Unit
+    ) {
+        database.collection("product")
+            .whereEqualTo("kategori_product", kategori)
+            .get()
+            .addOnSuccessListener {
+                    snapshots ->
+                val list = snapshots.documents.mapNotNull { doc ->
+                    doc.toObject(ProductModel::class.java)?.apply {
+                        documentId = doc.id   // 🔥 isi documentId
+                    }
+                }
+                callback(list)
+            }
+    }
 }
