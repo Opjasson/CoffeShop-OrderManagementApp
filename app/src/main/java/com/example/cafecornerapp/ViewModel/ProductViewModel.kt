@@ -79,4 +79,15 @@ fun getProductByKategori(kategori : String) {
         _productKategoriResult.value = it
     }
 }
+
+    //    Get product by offer
+
+    private val _productOfferResult = MutableLiveData<List<ProductModel>>()
+    val productOffer : LiveData<List<ProductModel>> = _productOfferResult
+
+    fun getProductOffer() {
+        repository.getProductOffer() {
+            _productOfferResult.value = it
+        }
+    }
 }
