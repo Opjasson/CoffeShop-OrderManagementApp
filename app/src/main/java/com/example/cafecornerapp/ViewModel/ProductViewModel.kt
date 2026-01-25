@@ -70,4 +70,13 @@ class ProductViewModel : ViewModel() {
         }
     }
 
+//    get product by kategori
+private val _productKategoriResult = MutableLiveData<List<ProductModel>>()
+    val productKategoriResult: LiveData<List<ProductModel>> = _productKategoriResult
+
+fun getProductByKategori(kategori : String) {
+    repository.getProductByKategori(kategori) {
+        _productKategoriResult.value = it
+    }
+}
 }

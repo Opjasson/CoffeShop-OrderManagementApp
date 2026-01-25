@@ -52,4 +52,10 @@ class CardProductlistAdapter(val items: MutableList<ProductModel>):
     }
 
     override fun getItemCount(): Int =items.size
+
+    fun updateData(newItems: MutableList<ProductModel>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
 }
