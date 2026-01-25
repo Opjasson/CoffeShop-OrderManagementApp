@@ -37,14 +37,15 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-       initSideBar()
-
+        initSideBar()
         initShowProduct()
     }
 
     private fun initShowProduct () {
         var kategori : String = "makanan"
         viewModel.getProductByKategori(kategori)
+
+//        Button kategori makanan handle
         binding.makananBtn.setOnClickListener {
             kategori = "makanan"
             binding.makananBtn.backgroundTintList = ColorStateList
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.getProductByKategori(kategori)
         }
 
+//        Button kategori minuman handle
         binding.minumanBtn.setOnClickListener {
             kategori = "minuman"
             binding.makananBtn.backgroundTintList = ColorStateList

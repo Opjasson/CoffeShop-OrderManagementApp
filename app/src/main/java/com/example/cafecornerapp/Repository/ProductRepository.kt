@@ -80,4 +80,22 @@ class ProductRepository {
                 callback(list)
             }
     }
+
+    //     get product offer
+    fun getProductOffer(
+        callback: (List<ProductModel>) -> Unit
+    ) {
+        database.collection("product")
+            .whereEqualTo("promo", true)
+            .get()
+            .addOnSuccessListener {
+                    snapshots ->
+                val list = snapshots.documents.mapNotNull { doc ->
+                    doc.toObject(ItemsModel::class.java)?.apply {
+                        documentId = doc.id   // 🔥 isi documentId
+                    }
+                }
+                callback(list)
+            }
+    }
 }
