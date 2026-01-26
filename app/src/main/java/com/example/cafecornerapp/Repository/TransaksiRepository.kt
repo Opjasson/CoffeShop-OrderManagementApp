@@ -1,12 +1,18 @@
 package com.example.cafecornerapp.Repository
 
+import androidx.lifecycle.viewModelScope
+import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.Helper.ConvertDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.launch
+import java.util.UUID
+
 
 class TransaksiRepository {
     private val database = FirebaseFirestore.getInstance()
     private val convertDate = ConvertDateTime()
+
 
     //    Add cart
     fun createTransaksi(
@@ -14,8 +20,9 @@ class TransaksiRepository {
         totalHarga: Long,
         catatanTambahan: String,
         buktiTransfer: String,
-        onResult: (Boolean) -> Unit
+        onResult: (String) -> Unit
     ) {
+        val transactionId = UUID.randomUUID().toString()
         var data = mapOf(
             "userId" to userId,
             "totalHarga" to totalHarga,
@@ -24,12 +31,13 @@ class TransaksiRepository {
             "createdAt" to convertDate.formatTimestamp(Timestamp.now())
         )
         database.collection("transaksi")
-            .add(data)
+            .document(transactionId)
+            .set(data)
             .addOnSuccessListener {
-                onResult(true)
+                onResult(transactionId)
             }
             .addOnFailureListener {
-                onResult(false)
+                onResult("")
             }
     }
 }

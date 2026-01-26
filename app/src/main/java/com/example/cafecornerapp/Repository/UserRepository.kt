@@ -1,5 +1,7 @@
 package com.example.cafecornerapp.Repository
 
+import android.util.Log
+import com.example.cafecornerapp.Domain.ProductModel
 import com.example.cafecornerapp.Domain.UsersModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -17,8 +19,12 @@ class UserRepository {
             .get()
             .addOnSuccessListener {
                     document ->
-                val user = document.toObject(UsersModel::class.java)
-                onResult(user)
+                val list = document.toObject(UsersModel::class.java)?.apply {
+                        documentId = document.id   // 🔥 isi documentId
+                    }
+                Log.d("USERID", list.toString())
+
+                onResult(list)
             }
             .addOnFailureListener {
                 onResult(null)

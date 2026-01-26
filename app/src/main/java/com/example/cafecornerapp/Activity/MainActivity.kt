@@ -5,7 +5,9 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -13,14 +15,17 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cafecornerapp.Adapter.CardProductlistAdapter
+import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.R
 import com.example.cafecornerapp.ViewModel.ProductViewModel
 import com.example.cafecornerapp.ViewModel.TransaksiViewModel
 import com.example.cafecornerapp.ViewModel.UserViewModel
 import com.example.cafecornerapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
@@ -31,6 +36,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModelTransaksi = TransaksiViewModel()
 
     private val viewModel = ProductViewModel()
+
+    private val prefRepo = TransaksiPreference(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,18 +57,48 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initShowProduct () {
-//        create new transaksi
+//      get user login
 
         userViewModel.getUserByUid()
 
         userViewModel.userLogin.observe(this) { user ->
             user?.let {
-                binding.usernameTxt.text = "Good morning, " + it.username
+                binding.usernameTxt.text = "Good morning, " + user?.username
+            }
+
+            lifecycleScope.launch {
+                prefRepo.getTransactionId().collect {
+                    Log.d("TRANSAKSI_ID", it.toString() ?: "kosong")
+                }
+            }
+
+            //      create transaksi
+            binding.transaksiBtn.setOnClickListener {
+//                lifecycleScope.launch {
+//                        prefRepo.clearTransactionId()
+//                    }
+
+                viewModelTransaksi.createTransaksi(
+                    user?.documentId.toString(),
+                    0,
+                    "",
+                    ""
+                )
+
+                viewModelTransaksi.createStatus.observe(this) {
+                    documentId ->
+                    lifecycleScope.launch {
+                        prefRepo.saveTransactionId(documentId)
+                    }
+                    Toast.makeText(this, "Silahkan melanjutkan pesanan", Toast.LENGTH_SHORT).show()
+                }
             }
         }
-//        binding.transaksiBtn.setOnClickListener {
-//            viewModelTransaksi.createTransaksi()
-//        }
+
+
+
+
+
 
         var kategori : String = "makanan"
         viewModel.getProductByKategori(kategori)
