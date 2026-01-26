@@ -4,20 +4,29 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cafecornerapp.Activity.MainActivity
+import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.Domain.ProductModel
+import com.example.cafecornerapp.ViewModel.CartViewModel
 import com.example.cafecornerapp.ViewModel.ProductViewModel
+import com.example.cafecornerapp.ViewModel.UserViewModel
 import com.example.cafecornerapp.databinding.ViewHolderCardproductListBinding
+import kotlinx.coroutines.launch
 
-class CardProductlistAdapter(val items: MutableList<ProductModel>):
+class CardProductlistAdapter(
+    private val onAddToCart : (String) -> Unit
+    ,val items: MutableList<ProductModel>
+):
     RecyclerView.Adapter<CardProductlistAdapter.Viewholder>() {
-    private val viewModel = ProductViewModel()
     lateinit var context: Context
+
     class Viewholder(val binding: ViewHolderCardproductListBinding):
         RecyclerView.ViewHolder(binding.root)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardProductlistAdapter.Viewholder {
@@ -43,12 +52,11 @@ class CardProductlistAdapter(val items: MutableList<ProductModel>):
             }, 500)
         }
 
-
-        holder.itemView.setOnClickListener {
-//            val intent = Intent(context, DetailActivity::class.java)
-//            intent.putExtra("object", items[position])
-//            context.startActivity(intent)
+        holder.binding.view.setOnClickListener {
+            onAddToCart(items[position].documentId)
         }
+
+
     }
 
     override fun getItemCount(): Int =items.size
@@ -58,4 +66,5 @@ class CardProductlistAdapter(val items: MutableList<ProductModel>):
         items.addAll(newItems)
         notifyDataSetChanged()
     }
+
 }

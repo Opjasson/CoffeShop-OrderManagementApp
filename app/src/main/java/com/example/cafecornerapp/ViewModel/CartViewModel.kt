@@ -17,6 +17,7 @@ class CartViewModel : ViewModel() {
         productId: String,
         jumlah: Long
     ) {
+        Log.d("DATAKU", "dipanggil $userId $transaksiId $productId")
         repository.addCart(
             userId,
             transaksiId,

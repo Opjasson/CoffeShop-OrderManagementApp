@@ -15,12 +15,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cafecornerapp.Adapter.CardProductlistAdapter
 import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.R
+import com.example.cafecornerapp.ViewModel.CartViewModel
 import com.example.cafecornerapp.ViewModel.ProductViewModel
 import com.example.cafecornerapp.ViewModel.TransaksiViewModel
 import com.example.cafecornerapp.ViewModel.UserViewModel
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModelTransaksi = TransaksiViewModel()
 
+    private val viewModelCart = CartViewModel()
     private val viewModel = ProductViewModel()
 
     private val prefRepo = TransaksiPreference(this)
@@ -54,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         initSideBar()
         initShowProduct()
         initShowOffer()
+
     }
 
     private fun initShowProduct () {
@@ -66,11 +70,7 @@ class MainActivity : AppCompatActivity() {
                 binding.usernameTxt.text = "Good morning, " + user?.username
             }
 
-            lifecycleScope.launch {
-                prefRepo.getTransactionId().collect {
-                    Log.d("TRANSAKSI_ID", it.toString() ?: "kosong")
-                }
-            }
+
 
             //      create transaksi
             binding.transaksiBtn.setOnClickListener {
@@ -150,12 +150,30 @@ class MainActivity : AppCompatActivity() {
             viewModel.getProductByKategori(kategori)
         }
 
-        val productAdapter = CardProductlistAdapter(mutableListOf())
+        val productAdapter = CardProductlistAdapter(
+            onAddToCart = {
+                    productId ->
+                userViewModel.userLogin.observe(this) { user ->
+                    lifecycleScope.launch {
+                        prefRepo.getTransactionId().collect {
+                            viewModelCart.addCart(
+                                user!!.documentId.toString(),
+                                it.toString(),
+                                productId,
+                                2
+                            )
+                        }
+                    }
+
+                }
+
+            },
+            mutableListOf()
+        )
+
         binding.rvMenu.adapter = productAdapter
 
-
-
-        viewModel.productKategoriResult.observe(this) {
+        viewModel.productKategoriResult.observe(this@MainActivity) {
                 list ->
             binding.rvMenu.layoutManager = LinearLayoutManager(this@MainActivity,
                 LinearLayoutManager.HORIZONTAL,false
@@ -164,11 +182,33 @@ class MainActivity : AppCompatActivity() {
 
             productAdapter.updateData(list.toMutableList())
         }
+
+
     }
 
     private fun initShowOffer () {
-        val productAdapter = CardProductlistAdapter(mutableListOf())
+        val productAdapter = CardProductlistAdapter(
+            onAddToCart = {
+                    productId ->
+                userViewModel.userLogin.observe(this) { user ->
+                    lifecycleScope.launch {
+                        prefRepo.getTransactionId().collect {
+                            viewModelCart.addCart(
+                                user!!.documentId.toString(),
+                                it.toString(),
+                                productId,
+                                2
+                            )
+                        }
+                    }
+
+                }
+
+            },
+            mutableListOf()
+        )
         binding.rvSpecial.adapter = productAdapter
+
 
         viewModel.getProductOffer()
 
