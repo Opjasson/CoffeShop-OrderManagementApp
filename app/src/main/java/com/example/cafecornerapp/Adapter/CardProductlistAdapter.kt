@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cafecornerapp.Activity.CartActivity
 import com.example.cafecornerapp.Activity.MainActivity
 import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.Domain.ProductModel
@@ -46,16 +47,12 @@ class CardProductlistAdapter(
         Glide.with(context).load(items[position].imgUrl).into(holder.binding.pic)
 
         holder.binding.view.setOnClickListener {
+            onAddToCart(items[position].documentId)
             Handler(Looper.getMainLooper()).postDelayed({
-                val intent = Intent(context, MainActivity::class.java)
+                val intent = Intent(context, CartActivity::class.java)
                 ContextCompat.startActivity(context, intent, null)
             }, 500)
         }
-
-        holder.binding.view.setOnClickListener {
-            onAddToCart(items[position].documentId)
-        }
-
 
     }
 

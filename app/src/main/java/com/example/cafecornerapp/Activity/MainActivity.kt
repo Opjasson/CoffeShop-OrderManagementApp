@@ -150,17 +150,20 @@ class MainActivity : AppCompatActivity() {
             viewModel.getProductByKategori(kategori)
         }
 
+
         val productAdapter = CardProductlistAdapter(
+//            menerima data dari adapter
             onAddToCart = {
                     productId ->
+
                 userViewModel.userLogin.observe(this) { user ->
                     lifecycleScope.launch {
                         prefRepo.getTransactionId().collect {
-                            viewModelCart.addCart(
-                                user!!.documentId.toString(),
-                                it.toString(),
-                                productId,
-                                2
+                            viewModelCart.addOrUpdateCart(
+                               userId =  user!!.documentId.toString(),
+                               transaksiId =  it.toString(),
+                               productId =  productId,
+                               qty =  1
                             )
                         }
                     }

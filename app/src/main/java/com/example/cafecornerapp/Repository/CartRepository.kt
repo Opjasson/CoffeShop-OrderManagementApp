@@ -9,6 +9,7 @@ import com.example.cafecornerapp.Domain.ProductModel
 import com.example.cafecornerapp.Helper.ConvertDateTime
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class CartRepository {
     private val database = FirebaseFirestore.getInstance()
@@ -56,6 +57,34 @@ class CartRepository {
                 }
                 callback(list)
             }
+    }
+
+    //     get cart by cartId
+    suspend fun getCartByProductAndTransaction(
+        userId: String,
+        transaksiId: String,
+        productId: String
+    ): CartModel? {
+        val snapshot = database.collection("cart")
+            .whereEqualTo("userId", userId)
+            .whereEqualTo("transaksiId", transaksiId)
+            .whereEqualTo("productId", productId)
+            .get()
+            .await() // query snapshoot
+
+        return snapshot.documents.firstOrNull()
+            ?.toObject(CartModel::class.java)
+            ?.apply {
+                documentId = snapshot.documents.first().id
+            }
+    }
+
+//    update jumlah cart
+    suspend fun updateCartQty(cartId: String, newQty: Long) {
+        database.collection("cart")
+            .document(cartId)
+            .update("jumlah", newQty)
+            .await()
     }
 
     //    Delete cart

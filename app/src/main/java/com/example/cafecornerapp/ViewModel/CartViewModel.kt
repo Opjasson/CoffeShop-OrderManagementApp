@@ -51,7 +51,7 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    //    get transaksi custom
+    //    get transaksi custom untuk manajemen cart page
     private val _transaksiUI = MutableLiveData<List<CartCustomModel>>()
     val transaksiUI: LiveData<List<CartCustomModel>> = _transaksiUI
 
@@ -72,6 +72,33 @@ class CartViewModel : ViewModel() {
 
             }
             _transaksiUI.postValue(result)
+        }
+    }
+
+//    handle add cart or update cart if cart have same product id
+val addOrUpdateStatus = MutableLiveData<Boolean>()
+    fun addOrUpdateCart(
+        userId: String,
+        transaksiId: String,
+        productId: String,
+        qty: Long
+    ) {
+        viewModelScope.launch {
+            val existingCart = repository
+                .getCartByProductAndTransaction(userId, transaksiId, productId)
+
+            if (existingCart != null) {
+                // ✅ sudah ada → update jumlah
+                val newQty = existingCart.jumlah + qty
+                repository.updateCartQty(existingCart.documentId!!, newQty)
+            } else {
+                // ✅ belum ada → insert baru
+                repository.addCart(
+                    userId, transaksiId, productId, qty
+                ) {
+                    addOrUpdateStatus.value = it
+                }
+            }
         }
     }
 
