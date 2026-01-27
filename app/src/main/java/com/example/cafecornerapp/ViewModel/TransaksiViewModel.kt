@@ -32,12 +32,11 @@ class TransaksiViewModel : ViewModel() {
                 success ->
             if (!success.isEmpty()){
                 createStatus.value = success
-//                viewModelScope.launch {
-//                    prefRepo.saveTransactionId(success)
-//                }
             }else {
                 Log.d("FAILEDCREATE", "FAILED-CREATE ITEM")
             }
         }
     }
+
+
 }

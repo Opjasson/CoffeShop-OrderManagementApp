@@ -40,4 +40,28 @@ class TransaksiRepository {
                 onResult("")
             }
     }
+
+    //    Update Transaksi
+    fun updateTransaksi(
+        transaksiId: String,
+        totalHarga: Long,
+        catatanTambahan: String,
+        buktiTransfer: String,
+        onResult: (String) -> Unit
+    ) {
+        var data = mapOf(
+            "totalHarga" to totalHarga,
+            "catatanTambahan" to catatanTambahan,
+            "buktiTransfer" to buktiTransfer,
+        )
+        database.collection("transaksi")
+            .document(transaksiId)
+            .update(data)
+            .addOnSuccessListener {
+                onResult(true)
+            }
+            .addOnFailureListener {
+                onResult(false)
+            }
+    }
 }
