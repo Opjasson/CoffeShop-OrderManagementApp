@@ -1,20 +1,31 @@
 package com.example.cafecornerapp.Activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cafecornerapp.Adapter.CardProductAdapter
+import com.example.cafecornerapp.Adapter.CardProductListCartAdapter
+import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.R
 import com.example.cafecornerapp.ViewModel.CartViewModel
 import com.example.cafecornerapp.databinding.ActivityCartBinding
+import kotlinx.coroutines.launch
 
 class CartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCartBinding
     private val viewModel = CartViewModel()
+    private lateinit var drawerLayout: DrawerLayout
+
+    private val prefRepo = TransaksiPreference(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,15 +39,66 @@ class CartActivity : AppCompatActivity() {
             insets
         }
 
-        binding.loadCart.visibility= View.VISIBLE
-        viewModel..observe(this) {
-                list ->
-            binding.MPproductView.layoutManager= GridLayoutManager(this, 2)
-            binding.MPproductView.adapter= CardProductAdapter(list.toMutableList())
-            binding.MPLoadProduct.visibility= View.GONE
+        lifecycleScope.launch {
+            prefRepo.getTransactionId().collect {
+                viewModel.getCartByTransaksiId(it.toString())
+            }
         }
 
-        viewModel.loadAllItems()
 
+        binding.loadCart.visibility= View.VISIBLE
+        viewModel.cartResult.observe(this) {
+                list ->
+            viewModel.loadCartCustom(list)
+
+            viewModel.transaksiUI.observe(this) {
+                data ->
+                binding.rvCart.layoutManager= LinearLayoutManager(this,
+                    LinearLayoutManager.VERTICAL, false)
+                binding.rvCart.adapter= CardProductListCartAdapter(data.toMutableList())
+                CardProductListCartAdapter(data.toMutableList()).submitList(data)
+                binding.loadCart.visibility= View.GONE
+            }
+
+        }
+    }
+
+    private fun initSideBar () {
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
+
+        drawerLayout = binding.drawerLayout
+
+        val navigationView = binding.navigationView
+
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.open,
+            R.string.close
+        )
+
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        navigationView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_home -> {
+                    startActivity(Intent(this, MainActivity::class.java))
+                }
+                R.id.menu_manageProduct -> {
+                    startActivity(Intent(this, ManageProductActivity::class.java))
+                }
+                R.id.menu_cart -> {
+                    startActivity(Intent(this, CartActivity::class.java))
+                }
+//                R.id.menu_logout -> {
+////                    logout()
+//                }
+            }
+            drawerLayout.closeDrawers()
+            true
+        }
     }
 }

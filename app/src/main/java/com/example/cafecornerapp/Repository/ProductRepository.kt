@@ -1,10 +1,12 @@
 package com.example.cafecornerapp.Repository
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.cafecornerapp.Helper.ConvertDateTime
 import com.example.cafecornerapp.Domain.ProductModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 class ProductRepository {
     private val database = FirebaseFirestore.getInstance()
@@ -97,5 +99,27 @@ class ProductRepository {
                 }
                 callback(list)
             }
+    }
+
+    //     get product by productId
+   suspend fun getProductByProductId(
+        productId: String
+    ) : ProductModel? {
+        return try {
+            val document = database.collection("product")
+                .document(productId)
+                .get()
+                .await() // 🔥 penting (kotlinx-coroutines-play-services)
+
+            if (document.exists()) {
+                document.toObject(ProductModel::class.java)?.apply {
+                    documentId = document.id
+                }
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            null
+        }
     }
 }

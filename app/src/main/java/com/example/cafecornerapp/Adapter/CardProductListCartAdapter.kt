@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cafecornerapp.Activity.MainActivity
+import com.example.cafecornerapp.Domain.CartCustomModel
 import com.example.cafecornerapp.Domain.CartModel
 import com.example.cafecornerapp.Domain.ProductModel
 import com.example.cafecornerapp.ViewModel.CartViewModel
@@ -17,7 +19,7 @@ import com.example.cafecornerapp.databinding.ViewHolderCardcartBinding
 import com.example.cafecornerapp.databinding.ViewHolderCardproductListBinding
 
 
-class CardProductListCartAdapter(val items: MutableList<CartModel>):
+class CardProductListCartAdapter(val items: MutableList<CartCustomModel>):
     RecyclerView.Adapter<CardProductListCartAdapter.Viewholder>() {
     private val viewModel = CartViewModel()
     lateinit var context: Context
@@ -30,17 +32,22 @@ class CardProductListCartAdapter(val items: MutableList<CartModel>):
         return Viewholder(binding)
     }
 
+    fun submitList(newItems: List<CartCustomModel>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
+    }
+
     override fun onBindViewHolder(holder: CardProductListCartAdapter.Viewholder, position: Int) {
-        holder.binding.tvNamaMenu.text= items[position].productId
-            .replaceFirstChar { it.uppercase() }
-        holder.binding.tvHarga.text="$"+items[position].transaksiId.toString()
-        holder.binding.tvKategori.text= items[position].jumlah.toString().take(50)
-            .replaceFirstChar { it.uppercase() } + "..."
+        Log.d("holderCard", items[position].toString())
+        holder.binding.tvNamaMenu.text= items[position].nama
+        holder.binding.tvHarga.text="$"+items[position].harga.toString()
+        holder.binding.tvKategori.text= items[position].kategori.toString()
 
-        Glide.with(context).load(items[position].imgUrl).into(holder.binding.pic)
+        Glide.with(context).load(items[position].imgUrl).into(holder.binding.imgMenu)
 
-        holder.binding.deleteBtn.setOnClickListener {
-            viewModel.deleteProduct(items[position].documentId)
+        holder.binding.btnDelete.setOnClickListener {
+            viewModel.deleteCart(items[position].cartId)
             Handler(Looper.getMainLooper()).postDelayed({
                 val intent = Intent(context, MainActivity::class.java)
                 ContextCompat.startActivity(context, intent, null)

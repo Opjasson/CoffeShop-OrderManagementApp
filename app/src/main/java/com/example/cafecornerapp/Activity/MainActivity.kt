@@ -249,6 +249,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_manageProduct -> {
                     startActivity(Intent(this, ManageProductActivity::class.java))
                 }
+                R.id.menu_cart -> {
+                    startActivity(Intent(this, CartActivity::class.java))
+                }
 //                R.id.menu_logout -> {
 ////                    logout()
 //                }

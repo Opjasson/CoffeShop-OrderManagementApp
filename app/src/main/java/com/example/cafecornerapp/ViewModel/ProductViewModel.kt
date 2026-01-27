@@ -90,4 +90,15 @@ fun getProductByKategori(kategori : String) {
             _productOfferResult.value = it
         }
     }
+
+    //    get product by itemId
+//    private val _productIdResult = MutableLiveData<ProductModel>()
+//    val productIdResult: LiveData<ProductModel> = _productIdResult
+//
+//    fun getProductById(id : String) {
+//        repository.getProductByProductId(id) {
+//            _productIdResult.value = it
+//        }
+//    }
+
 }

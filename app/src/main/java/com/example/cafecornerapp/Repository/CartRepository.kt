@@ -1,6 +1,9 @@
 package com.example.cafecornerapp.Repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.cafecornerapp.Domain.CartCustomModel
 import com.example.cafecornerapp.Domain.CartModel
 import com.example.cafecornerapp.Domain.ProductModel
 import com.example.cafecornerapp.Helper.ConvertDateTime
@@ -36,7 +39,7 @@ class CartRepository {
             }
     }
 
-    //     get product by kategori
+    //     get cart by transaksiId
     fun getCartByTransaksiId(
         transaksiId : String,
         callback : (List<CartModel>) -> Unit
@@ -51,8 +54,19 @@ class CartRepository {
                         documentId = doc.id   // 🔥 isi documentId
                     }
                 }
-                Log.d("LISTDATA", list.toString())
                 callback(list)
             }
     }
+
+    //    Delete cart
+    fun deleteCart (cartId : String, onResult: (Boolean) -> Unit) {
+        database.collection("cart")
+            .document(cartId)
+            .delete()
+            .addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
+    }
+
+
+
 }
