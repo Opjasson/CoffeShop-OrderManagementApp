@@ -40,7 +40,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:paddingStart="16dp"
-                        android:paddingEnd="16dp">
+                        android:paddingEnd="16dp"
+                        android:paddingBottom="18dp">
 
                         <!-- RecyclerView Cart -->
                         <ProgressBar
@@ -126,6 +127,12 @@
                             app:layout_constraintTop_toBottomOf="@id/rbGopay" />
 
                         <!-- Buy -->
+                        <ImageView
+                            android:id="@+id/picTf"
+                            android:layout_width="380dp"
+                            android:layout_height="580dp"
+                            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
                         <Button
                             android:id="@+id/btnBuy"
                             android:layout_width="match_parent"

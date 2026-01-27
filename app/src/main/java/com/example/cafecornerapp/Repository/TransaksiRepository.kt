@@ -47,7 +47,7 @@ class TransaksiRepository {
         totalHarga: Long,
         catatanTambahan: String,
         buktiTransfer: String,
-        onResult: (String) -> Unit
+        onResult: (Boolean) -> Unit
     ) {
         var data = mapOf(
             "totalHarga" to totalHarga,
