@@ -281,6 +281,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_cart -> {
                     startActivity(Intent(this, CartActivity::class.java))
                 }
+                R.id.menu_history -> {
+                    startActivity(Intent(this, HistoryTransaksiActivity::class.java))
+                }
 //                R.id.menu_logout -> {
 ////                    logout()
 //                }

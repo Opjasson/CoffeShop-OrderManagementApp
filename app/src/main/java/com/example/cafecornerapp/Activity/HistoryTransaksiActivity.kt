@@ -2,18 +2,28 @@ package com.example.cafecornerapp.Activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cafecornerapp.Adapter.CardHistoryAdapter
+import com.example.cafecornerapp.Adapter.CardProductListCartAdapter
 import com.example.cafecornerapp.R
 import com.example.cafecornerapp.ViewModel.TransaksiViewModel
+import com.example.cafecornerapp.ViewModel.UserViewModel
 import com.example.cafecornerapp.databinding.ActivityHistoryTransaksiBinding
 
 class HistoryTransaksiActivity : AppCompatActivity() {
     private lateinit var binding : ActivityHistoryTransaksiBinding
     private val viewModel = TransaksiViewModel()
+    private val userViewModel = UserViewModel()
+    private lateinit var drawerLayout: DrawerLayout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,9 +35,30 @@ class HistoryTransaksiActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         initSideBar()
+        initGetTransaksi()
     }
 
+    private fun initGetTransaksi () {
+        userViewModel.getUserByUid()
+
+        userViewModel.userLogin.observe(this) { user ->
+            viewModel.loadTransaksiWithCart(user!!.documentId.toString())
+        }
+
+
+        viewModel.transaksiUI.observe(this){
+            data ->
+            Log.d("HISOTR", data.toString())
+            binding.historyView.layoutManager= LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false)
+            binding.historyView.adapter= CardHistoryAdapter(data.toMutableList())
+            binding.loadHistory.visibility = View.GONE
+        }
+
+
+    }
     private fun initSideBar () {
         val toolbar = binding.toolbar
         setSupportActionBar(toolbar)
@@ -57,6 +88,9 @@ class HistoryTransaksiActivity : AppCompatActivity() {
                 }
                 R.id.menu_cart -> {
                     startActivity(Intent(this, CartActivity::class.java))
+                }
+                R.id.menu_history -> {
+                    startActivity(Intent(this, HistoryTransaksiActivity::class.java))
                 }
 //                R.id.menu_logout -> {
 ////                    logout()

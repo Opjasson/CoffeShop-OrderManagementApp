@@ -75,19 +75,23 @@
                 android:id="@+id/tvIdPesanan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
                 android:text="Id Pesanan : 98aba04"
-                android:textSize="12sp"
                 android:textColor="#666666"
-                android:layout_marginTop="4dp" />
+                android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/tvItem"
-                android:layout_width="wrap_content"
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bakso Iga x 1"
-                android:textSize="12sp"
-                android:textColor="#666666"
-                android:layout_marginTop="4dp" />
+                android:text="Item :"
+                android:textSize="14sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/itemRv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
             <!-- Total -->
             <LinearLayout

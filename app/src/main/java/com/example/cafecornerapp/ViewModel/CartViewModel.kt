@@ -64,9 +64,9 @@ class CartViewModel : ViewModel() {
                         cartId = transaksi.documentId,
                         productId = transaksi.productId,
                         nama = product!!.nama_product,
-                        harga = product!!.harga_product.toString().toInt(),
+                        harga = product!!.harga_product,
                         kategori = product!!.kategori_product,
-                        jumlah = transaksi!!.jumlah.toString().toInt(),
+                        jumlah = transaksi!!.jumlah,
                         imgUrl = product!!.imgUrl.toString()
                     )
 

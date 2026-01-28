@@ -5,6 +5,8 @@ import com.example.cafecornerapp.Domain.ProductModel
 import com.example.cafecornerapp.Domain.UsersModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
+import kotlinx.coroutines.tasks.await
 
 class UserRepository {
     val database = FirebaseFirestore.getInstance()
@@ -29,5 +31,16 @@ class UserRepository {
             .addOnFailureListener {
                 onResult(null)
             }
+    }
+
+    suspend fun getUsersByUserId(userId: String): UsersModel? {
+        val doc = database.collection("users")
+            .document(userId)
+            .get()
+            .await()
+
+        return doc.toObject(UsersModel::class.java)?.apply {
+            documentId = doc.id
+        }
     }
 }

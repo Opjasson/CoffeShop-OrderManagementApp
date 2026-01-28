@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_cream"
     tools:context=".Activity.HistoryTransaksiActivity">
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -34,7 +35,24 @@
                     android:layout_height="match_parent"
                     android:fillViewport="true">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
 
+
+                        <ProgressBar
+                            android:id="@+id/loadHistory"
+                            style="?android:attr/progressBarStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/historyView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
             </FrameLayout>
         </LinearLayout>

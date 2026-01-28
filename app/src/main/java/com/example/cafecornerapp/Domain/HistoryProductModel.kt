@@ -3,11 +3,12 @@ package com.example.cafecornerapp.Domain
 import java.io.Serializable
 
 data class HistoryProductModel(
+    val username: String,
     val cartId: String,
     val productId: String,
     val nama: String,
-    val harga: Int,
+    val harga: Long,
     val kategori: String,
-    val jumlah: Int,
+    val jumlah: Long,
     val imgUrl: String
 ) : Serializable

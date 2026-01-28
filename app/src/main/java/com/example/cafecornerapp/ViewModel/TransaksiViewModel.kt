@@ -7,13 +7,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.Domain.CartCustomModel
+import com.example.cafecornerapp.Domain.HistoryProductModel
 import com.example.cafecornerapp.Domain.TransaksiWithCartModel
 import com.example.cafecornerapp.Repository.TransaksiRepository
+import com.example.cafecornerapp.Repository.UserRepository
 import kotlinx.coroutines.launch
 
 
 class TransaksiViewModel : ViewModel() {
     private val repository = TransaksiRepository()
+    private val repositoryUser = UserRepository()
 //    private var prefRepo = TransaksiPreference
 
 
@@ -72,13 +75,17 @@ fun loadTransaksiWithCart(userId: String) {
 
             val cartCustom = carts.mapNotNull { cart ->
                 val product = repository.getProductById(cart.productId)
+                val username = repositoryUser.getUsersByUserId(cart.userId)
                 product?.let {
-                    CartCustomModel(
+                    HistoryProductModel(
+                        username = username!!.username,
+                        cartId = cart.documentId,
                         productId = cart.productId,
                         nama = it.nama_product,
                         harga = it.harga_product,
                         kategori = it.kategori_product,
-                        jumlah = cart.jumlah
+                        jumlah = cart.jumlah,
+                        imgUrl = it.imgUrl
                     )
                 }
             }
