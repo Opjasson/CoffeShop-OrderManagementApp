@@ -142,18 +142,22 @@ class CartActivity : AppCompatActivity() {
                         imgUrl
                     )
 
+                    viewModelTransaksi.updateStatus.observe(this) {
+                            success ->
+                        if (success) {
+                            Toast.makeText(this, "Pesanan Sedang Diproses", Toast.LENGTH_SHORT).show()
+                            finish()
+                        }
+                    }
+
                     lifecycleScope.launch {
                         prefRepo.clearTransactionId()
                     }
+
+
                 }
 
-                viewModelTransaksi.updateStatus.observe(this) {
-                    success ->
-                    if (success) {
-                        Toast.makeText(this, "Pesanan Sedang Diproses", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, MainActivity::class.java))
-                    }
-                }
+
 
 
                 binding.tvTotal.text = "Rp $totalHarga"

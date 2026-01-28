@@ -30,6 +30,8 @@ import com.example.cafecornerapp.ViewModel.TransaksiViewModel
 import com.example.cafecornerapp.ViewModel.UserViewModel
 import com.example.cafecornerapp.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -157,33 +159,26 @@ class MainActivity : AppCompatActivity() {
 
                 userViewModel.userLogin.observe(this) { user ->
                     lifecycleScope.launch {
-                        prefRepo.getTransactionId().collect {
+                        val transaksiId = prefRepo.getTransactionId().first()
 
-                            if (it == null) {
-                                withContext(Dispatchers.Main) {
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        "Buat Transaksi Dulu!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            } else {
-                                viewModelCart.addOrUpdateCart(
-                                    userId =  user!!.documentId.toString(),
-                                    transaksiId =  it.toString(),
-                                    productId =  productId,
-                                    qty =  1
-                                )
-                                withContext(Dispatchers.Main) {
-                                    Handler(Looper.getMainLooper()).postDelayed({
-                                        val intent = Intent(this@MainActivity, CartActivity::class.java)
-                                        ContextCompat.startActivity(this@MainActivity, intent, null)
-                                    }, 500)
-                                }
-
-                            }
-
+                        if (transaksiId.isNullOrBlank()) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Buat Transaksi Dulu!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@launch
                         }
+
+                        viewModelCart.addOrUpdateCart(
+                            userId = user!!.documentId!!,
+                            transaksiId = transaksiId,
+                            productId = productId,
+                            qty = 1
+                        )
+
+                        delay(500)
+                        startActivity(Intent(this@MainActivity, CartActivity::class.java))
                     }
 
                 }
@@ -211,16 +206,29 @@ class MainActivity : AppCompatActivity() {
         val productAdapter = CardProductlistAdapter(
             onAddToCart = {
                     productId ->
+
                 userViewModel.userLogin.observe(this) { user ->
                     lifecycleScope.launch {
-                        prefRepo.getTransactionId().collect {
-                            viewModelCart.addOrUpdateCart(
-                                userId =  user!!.documentId.toString(),
-                                transaksiId =  it.toString(),
-                                productId =  productId,
-                                qty =  1
-                            )
+                        val transaksiId = prefRepo.getTransactionId().first()
+
+                        if (transaksiId.isNullOrBlank()) {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Buat Transaksi Dulu!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@launch
                         }
+
+                        viewModelCart.addOrUpdateCart(
+                            userId = user!!.documentId!!,
+                            transaksiId = transaksiId,
+                            productId = productId,
+                            qty = 1
+                        )
+
+                        delay(500)
+                        startActivity(Intent(this@MainActivity, CartActivity::class.java))
                     }
 
                 }
