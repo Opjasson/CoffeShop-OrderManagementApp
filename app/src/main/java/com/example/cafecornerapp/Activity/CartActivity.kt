@@ -24,6 +24,7 @@ import com.example.cafecornerapp.ViewModel.CartViewModel
 import com.example.cafecornerapp.ViewModel.ProductViewModel
 import com.example.cafecornerapp.ViewModel.TransaksiViewModel
 import com.example.cafecornerapp.databinding.ActivityCartBinding
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class CartActivity : AppCompatActivity() {
@@ -116,9 +117,8 @@ class CartActivity : AppCompatActivity() {
 
 //        get Cart by transaksi
         lifecycleScope.launch {
-            prefRepo.getTransactionId().collect {
-                viewModel.getCartByTransaksiId(it.toString())
-            }
+           val transId = prefRepo.getTransactionId().first()
+                viewModel.getCartByTransaksiId(transId.toString())
         }
 
         binding.loadCart.visibility= View.VISIBLE
