@@ -44,7 +44,6 @@ class NotaTransaksiActivity : AppCompatActivity() {
 
         val data = intent.getSerializableExtra("object")
                 as? TransaksiWithCartModel
-        Log.d("DataHISTORU", data.toString())
 
         binding.notaPelanggan.text = data!!.cartItems[0].username.toString()
         binding.tvTanggalNota.text = data!!.transaksi.createdAt.toString()

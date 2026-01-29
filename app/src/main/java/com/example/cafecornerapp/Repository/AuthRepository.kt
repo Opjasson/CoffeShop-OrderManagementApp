@@ -65,4 +65,9 @@ fun forgotPassword (
 
 }
 
+    //    Logout repository
+    fun logout () {
+        auth.signOut()
+    }
+
 }

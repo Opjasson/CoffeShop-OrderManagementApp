@@ -149,6 +149,7 @@ class TambahProductActivity : AppCompatActivity() {
             val toolbar = binding.toolbar
             setSupportActionBar(toolbar)
 
+
             drawerLayout = binding.drawerLayout
 
             val navigationView = binding.navigationView

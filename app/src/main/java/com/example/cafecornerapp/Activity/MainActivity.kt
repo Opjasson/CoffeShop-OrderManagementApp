@@ -284,12 +284,16 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_history -> {
                     startActivity(Intent(this, HistoryTransaksiActivity::class.java))
                 }
-//                R.id.menu_logout -> {
-////                    logout()
-//                }
+                R.id.menu_logout -> {
+                    logout()
+                }
             }
             drawerLayout.closeDrawers()
             true
         }
+    }
+
+    fun logout () {
+
     }
 }

@@ -71,4 +71,9 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    //    Logout handle
+    fun logout () {
+        repository.logout()
+    }
+
 }
