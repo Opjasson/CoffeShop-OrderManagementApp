@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -35,6 +37,18 @@ class CardHistoryAdapter(val items: MutableList<TransaksiWithCartModel>):
         holder.binding.tvIdPesanan.text= items[position].transaksiId
         holder.binding.tvTotal.text= items[position].transaksi.totalHarga.toString()
         holder.binding.tvTanggal.text= items[position].transaksi.createdAt
+
+        Glide.with(context).load(items[position].transaksi.buktiTransfer).into(holder.binding.tfImg)
+
+        holder.binding.tfImg.visibility = View.GONE
+        holder.binding.transferTitle.setOnClickListener {
+            if (holder.binding.tfImg.visibility == 8) {
+                holder.binding.tfImg.visibility = View.VISIBLE
+            }else {
+                holder.binding.tfImg.visibility = View.GONE
+            }
+        }
+
 
         holder.binding.itemRv.apply {
             layoutManager = LinearLayoutManager(context)

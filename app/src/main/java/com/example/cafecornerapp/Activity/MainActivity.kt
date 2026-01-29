@@ -1,5 +1,6 @@
 package com.example.cafecornerapp.Activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -81,15 +83,16 @@ class MainActivity : AppCompatActivity() {
         userViewModel.userLogin.observe(this) { user ->
             user?.let {
                 binding.usernameTxt.text = "Good morning, " + user?.username
+
+                val headerView = binding.navigationView.getHeaderView(0)
+                headerView.findViewById<TextView>(R.id.tvNameHeader).text = user?.username
+                headerView.findViewById<TextView>(R.id.tvEmailHeader).text = user?.email
             }
 
 
 
             //      create transaksi
             binding.transaksiBtn.setOnClickListener {
-//                lifecycleScope.launch {
-//                        prefRepo.clearTransactionId()
-//                    }
 
                 viewModelTransaksi.createTransaksi(
                     user?.documentId.toString(),
@@ -292,7 +295,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, HistoryTransaksiActivity::class.java))
                 }
                 R.id.menu_logout -> {
-                    logout()
+                    showLogoutDialog()
                 }
             }
             drawerLayout.closeDrawers()
@@ -300,18 +303,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun logout () {
+    private fun showLogoutDialog() {
         val authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
-        lifecycleScope.launch {
-            authViewModel.logout()
-            userPreference.deleteUserId()
-
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-
-            startActivity(intent)
-            finish()
-        }
-
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Apakah kamu yakin ingin keluar?")
+            .setPositiveButton("Ya") { _, _ ->
+                authViewModel.logout()
+                lifecycleScope.launch {
+                    userPreference.deleteUserId()
+                }
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 }
