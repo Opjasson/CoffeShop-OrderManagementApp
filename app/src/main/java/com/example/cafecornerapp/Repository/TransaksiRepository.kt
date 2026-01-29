@@ -102,4 +102,22 @@ suspend fun getTransaksiByUser(userId: String): List<Pair<String, TransaksiModel
 
         return doc.toObject(ProductModel::class.java)
     }
+
+    //    Get transaksi handle laporan
+    suspend fun getTransaksiByDate(tanggal1: String, tanggal2: String):
+            List<Pair<String, TransaksiModel>> {
+        val snapshot = database
+            .collection("transaksi")
+            .whereGreaterThanOrEqualTo("createdAt", tanggal1)
+            .whereLessThanOrEqualTo("createdAt", tanggal2)
+            .orderBy("createdAt")
+            .get()
+            .await()
+
+        return snapshot.documents.mapNotNull { doc ->
+            doc.toObject(TransaksiModel::class.java)?.let {
+                doc.id to it
+            }
+        }
+    }
 }

@@ -294,6 +294,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_history -> {
                     startActivity(Intent(this, HistoryTransaksiActivity::class.java))
                 }
+                R.id.menu_laporan -> {
+                    startActivity(Intent(this, LaporanTransactionActivity::class.java))
+                }
                 R.id.menu_logout -> {
                     showLogoutDialog()
                 }

@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.cafecornerapp.DataStore.TransaksiPreference
 import com.example.cafecornerapp.Domain.CartCustomModel
 import com.example.cafecornerapp.Domain.HistoryProductModel
+import com.example.cafecornerapp.Domain.LaporanModel
+import com.example.cafecornerapp.Domain.LaporanProductModel
 import com.example.cafecornerapp.Domain.TransaksiWithCartModel
 import com.example.cafecornerapp.Repository.TransaksiRepository
 import com.example.cafecornerapp.Repository.UserRepository
@@ -100,4 +102,44 @@ fun loadTransaksiWithCart(userId: String) {
         _transaksiUI.postValue(result)
     }
 }
+
+    //    get transaksi to handle laporan
+    private val _transaksiLaporan =
+        MutableLiveData<List<LaporanModel>>()
+
+    val transaksiLaporan: LiveData<List<LaporanModel>> =
+        _transaksiLaporan
+
+    fun loadTransaksiLaporan(tanggal1: String, tanggal2: String) {
+        viewModelScope.launch {
+            val transaksiList = repository.getTransaksiByDate(tanggal1, tanggal2)
+
+            val result = transaksiList.map { (transaksiId, transaksi) ->
+
+                val carts = repository.getCartHistoryTransaksi(transaksiId)
+
+                val cartCustom = carts.mapNotNull { cart ->
+                    val product = repository.getProductById(cart.productId)
+                    product?.let {
+                        LaporanProductModel(
+                            createdAt = cart.createdAt,
+                            cartId = cart.documentId,
+                            productId = cart.productId,
+                            nama = it.nama_product,
+                            harga = it.harga_product,
+                            kategori = it.kategori_product,
+                            jumlah = cart.jumlah,
+                            imgUrl = it.imgUrl
+                        )
+                    }
+                }
+
+                LaporanModel(
+                    cartItems = cartCustom
+                )
+            }
+
+            _transaksiLaporan.postValue(result)
+        }
+    }
 }
