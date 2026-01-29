@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.cafecornerapp.Activity.MainActivity
+import com.example.cafecornerapp.Activity.NotaTransaksiActivity
 import com.example.cafecornerapp.Domain.ProductModel
 import com.example.cafecornerapp.Domain.TransaksiWithCartModel
 import com.example.cafecornerapp.databinding.ViewHolderCardtransaksiBinding
@@ -42,10 +43,10 @@ class CardHistoryAdapter(val items: MutableList<TransaksiWithCartModel>):
 
 
 
-        holder.itemView.setOnClickListener {
-//            val intent = Intent(context, DetailActivity::class.java)
+        holder.binding.historyView.setOnClickListener {
+            val intent = Intent(context, NotaTransaksiActivity::class.java)
 //            intent.putExtra("object", items[position])
-//            context.startActivity(intent)
+            context.startActivity(intent)
         }
     }
 

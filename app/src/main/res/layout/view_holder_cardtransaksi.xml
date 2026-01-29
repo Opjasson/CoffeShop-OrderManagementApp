@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/historyView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
@@ -18,24 +19,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2025-07-29"
-            android:textSize="12sp"
-            android:textColor="#888888" />
+            android:textColor="#888888"
+            android:textSize="12sp" />
 
         <!-- Status -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 android:text="Status"
-                android:textSize="12sp"
                 android:textColor="#666666"
-                android:layout_marginEnd="4dp" />
+                android:textSize="12sp" />
 
             <ImageView
                 android:layout_width="10dp"
@@ -56,20 +57,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/lineRed"
             android:layout_below="@id/tvTanggal"
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
+            android:layout_toEndOf="@id/lineRed"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvPelanggan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pelanggan : Robi"
-                android:textStyle="bold"
+                android:text="Pelanggan : "
+                android:textColor="#000000"
                 android:textSize="14sp"
-                android:textColor="#000000" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvIdPesanan"
@@ -104,18 +105,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total Nominal :"
-                    android:textSize="12sp"
-                    android:textColor="#666666" />
+                    android:textColor="#666666"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20000"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
+                    android:layout_marginStart="4dp"
+                    android:text="0000"
                     android:textColor="#000000"
-                    android:layout_marginStart="4dp" />
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
