@@ -18,12 +18,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cafecornerapp.Adapter.CardProductlistAdapter
 import com.example.cafecornerapp.DataStore.TransaksiPreference
+import com.example.cafecornerapp.DataStore.UserPreference
 import com.example.cafecornerapp.R
+import com.example.cafecornerapp.ViewModel.AuthViewModel
 import com.example.cafecornerapp.ViewModel.CartViewModel
 import com.example.cafecornerapp.ViewModel.ProductViewModel
 import com.example.cafecornerapp.ViewModel.TransaksiViewModel
@@ -41,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     private val userViewModel = UserViewModel()
 
+
     private val viewModelTransaksi = TransaksiViewModel()
 
     private val viewModelCart = CartViewModel()
@@ -48,11 +52,15 @@ class MainActivity : AppCompatActivity() {
 
     private val prefRepo = TransaksiPreference(this)
 
+    private lateinit var userPreference: UserPreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        userPreference = UserPreference(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -63,7 +71,6 @@ class MainActivity : AppCompatActivity() {
         initSideBar()
         initShowProduct()
         initShowOffer()
-
     }
 
     private fun initShowProduct () {
@@ -294,6 +301,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun logout () {
+        val authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        lifecycleScope.launch {
+            authViewModel.logout()
+            userPreference.deleteUserId()
+
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+
+            startActivity(intent)
+            finish()
+        }
 
     }
 }
