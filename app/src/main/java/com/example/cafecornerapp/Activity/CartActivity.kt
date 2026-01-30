@@ -1,9 +1,11 @@
 package com.example.cafecornerapp.Activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,10 +22,13 @@ import com.bumptech.glide.Glide
 import com.example.cafecornerapp.Adapter.CardProductAdapter
 import com.example.cafecornerapp.Adapter.CardProductListCartAdapter
 import com.example.cafecornerapp.DataStore.TransaksiPreference
+import com.example.cafecornerapp.DataStore.UserPreference
 import com.example.cafecornerapp.R
+import com.example.cafecornerapp.ViewModel.AuthViewModel
 import com.example.cafecornerapp.ViewModel.CartViewModel
 import com.example.cafecornerapp.ViewModel.ProductViewModel
 import com.example.cafecornerapp.ViewModel.TransaksiViewModel
+import com.example.cafecornerapp.ViewModel.UserViewModel
 import com.example.cafecornerapp.databinding.ActivityCartBinding
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -32,17 +38,22 @@ class CartActivity : AppCompatActivity() {
     private val viewModel = CartViewModel()
 
     private val viewModelTransaksi = TransaksiViewModel()
+    private val userViewModel = UserViewModel()
 
     private val viewModelImg = ProductViewModel()
     private lateinit var drawerLayout: DrawerLayout
 
     private val prefRepo = TransaksiPreference(this)
 
+    private lateinit var userPreference: UserPreference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityCartBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -52,6 +63,17 @@ class CartActivity : AppCompatActivity() {
 
         initHandleBuy()
         initSideBar()
+
+        userViewModel.getUserByUid()
+
+        userViewModel.userLogin.observe(this) { user ->
+            user?.let {
+
+                val headerView = binding.navigationView.getHeaderView(0)
+                headerView.findViewById<TextView>(R.id.tvNameHeader).text = user?.username
+                headerView.findViewById<TextView>(R.id.tvEmailHeader).text = user?.email
+            }
+        }
     }
 
     private fun initSideBar () {
@@ -87,13 +109,34 @@ class CartActivity : AppCompatActivity() {
                 R.id.menu_history -> {
                     startActivity(Intent(this, HistoryTransaksiActivity::class.java))
                 }
-//                R.id.menu_logout -> {
-////                    logout()
-//                }
+                R.id.menu_laporan -> {
+                    startActivity(Intent(this, LaporanTransactionActivity::class.java))
+                }
+                R.id.menu_logout -> {
+                    showLogoutDialog()
+                }
             }
             drawerLayout.closeDrawers()
             true
         }
+    }
+
+    private fun showLogoutDialog() {
+        val authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Apakah kamu yakin ingin keluar?")
+            .setPositiveButton("Ya") { _, _ ->
+                authViewModel.logout()
+                lifecycleScope.launch {
+                    userPreference.deleteUserId()
+                }
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     private fun initHandleBuy () {

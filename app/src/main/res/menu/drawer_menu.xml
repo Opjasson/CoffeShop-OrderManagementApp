@@ -27,10 +27,10 @@
             android:title="Report"
             android:icon="@drawable/print"/>
 
-        <item
-            android:id="@+id/menu_manageUser"
-            android:title="Manage User"
-            android:icon="@drawable/profile"/>
+<!--        <item-->
+<!--            android:id="@+id/menu_manageUser"-->
+<!--            android:title="Manage User"-->
+<!--            android:icon="@drawable/profile"/>-->
     </group>
 
 

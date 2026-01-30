@@ -1,10 +1,12 @@
 package com.example.cafecornerapp.Activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,17 +15,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.example.cafecornerapp.DataStore.UserPreference
 import com.example.cafecornerapp.R
+import com.example.cafecornerapp.ViewModel.AuthViewModel
 import com.example.cafecornerapp.ViewModel.ProductViewModel
+import com.example.cafecornerapp.ViewModel.UserViewModel
 import com.example.cafecornerapp.databinding.ActivityTambahProductBinding
+import kotlinx.coroutines.launch
 
 
 class TambahProductActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTambahProductBinding
     private var viewModel = ProductViewModel()
 
+    private lateinit var userPreference: UserPreference
     private lateinit var drawerLayout: DrawerLayout
+
+    private val userViewModel = UserViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +49,17 @@ class TambahProductActivity : AppCompatActivity() {
 
         initFormCreate()
         initSideBar()
+
+        userViewModel.getUserByUid()
+
+        userViewModel.userLogin.observe(this) { user ->
+            user?.let {
+
+                val headerView = binding.navigationView.getHeaderView(0)
+                headerView.findViewById<TextView>(R.id.tvNameHeader).text = user?.username
+                headerView.findViewById<TextView>(R.id.tvEmailHeader).text = user?.email
+            }
+        }
 
     }
 
@@ -144,42 +166,67 @@ class TambahProductActivity : AppCompatActivity() {
         }
     }
 
-   private fun initSideBar () {
+    private fun initSideBar () {
+        val toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
 
-            val toolbar = binding.toolbar
-            setSupportActionBar(toolbar)
+        drawerLayout = binding.drawerLayout
 
+        val navigationView = binding.navigationView
 
-            drawerLayout = binding.drawerLayout
+        val toggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            toolbar,
+            R.string.open,
+            R.string.close
+        )
 
-            val navigationView = binding.navigationView
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
 
-            val toggle = ActionBarDrawerToggle(
-                this,
-                drawerLayout,
-                toolbar,
-                R.string.open,
-                R.string.close
-            )
-
-            drawerLayout.addDrawerListener(toggle)
-            toggle.syncState()
-
-            navigationView.setNavigationItemSelectedListener {
-                when (it.itemId) {
-                    R.id.menu_home -> {
-                        startActivity(Intent(this, MainActivity::class.java))
-                    }
-                    R.id.menu_manageProduct -> {
-                        startActivity(Intent(this, ManageProductActivity::class.java))
-                    }
-//                R.id.menu_logout -> {
-////                    logout()
-//                }
+        navigationView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_home -> {
+                    startActivity(Intent(this, MainActivity::class.java))
                 }
-                drawerLayout.closeDrawers()
-                true
+                R.id.menu_manageProduct -> {
+                    startActivity(Intent(this, ManageProductActivity::class.java))
+                }
+                R.id.menu_cart -> {
+                    startActivity(Intent(this, CartActivity::class.java))
+                }
+                R.id.menu_history -> {
+                    startActivity(Intent(this, HistoryTransaksiActivity::class.java))
+                }
+                R.id.menu_laporan -> {
+                    startActivity(Intent(this, LaporanTransactionActivity::class.java))
+                }
+                R.id.menu_logout -> {
+                    showLogoutDialog()
+                }
             }
+            drawerLayout.closeDrawers()
+            true
         }
+    }
+
+    private fun showLogoutDialog() {
+        val authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
+        AlertDialog.Builder(this)
+            .setTitle("Logout")
+            .setMessage("Apakah kamu yakin ingin keluar?")
+            .setPositiveButton("Ya") { _, _ ->
+                authViewModel.logout()
+                lifecycleScope.launch {
+                    userPreference.deleteUserId()
+                }
+                val intent = Intent(this, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+            .setNegativeButton("Batal", null)
+            .show()
+    }
 
 }
