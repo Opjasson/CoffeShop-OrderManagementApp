@@ -52,10 +52,15 @@ class HistoryTransaksiActivity : AppCompatActivity() {
 
         userViewModel.userLogin.observe(this) { user ->
             user?.let {
-
                 val headerView = binding.navigationView.getHeaderView(0)
                 headerView.findViewById<TextView>(R.id.tvNameHeader).text = user?.username
                 headerView.findViewById<TextView>(R.id.tvEmailHeader).text = user?.email
+
+                val menu = binding.navigationView.menu
+                if (user?.documentId != "JTER5kKcDvRerpk6c9pJYGxhd7D2") {
+                    menu.findItem(R.id.menu_laporan)?.isVisible = false
+                    menu.findItem(R.id.menu_manageProduct)?.isVisible = false
+                }
             }
         }
     }
